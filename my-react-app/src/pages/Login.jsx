@@ -7,9 +7,10 @@ export default function Login(props) {
       <form>
         <LoginFormContent
           heading="Login"
-          label1="Name"
+          label1="Email"
           label2="Password"
           submitButton="Login"
+          text="Dont have an account?"
           button="Signup"
         />
       </form>
