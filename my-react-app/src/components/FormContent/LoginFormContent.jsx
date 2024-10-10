@@ -26,7 +26,9 @@ export default function LoginFormContent(props) {
         </Button>
         <div className="flex flex-row gap-2">
           <p>{props.text}</p>
-          <Button size="small">{props.button}</Button>
+          <Button size="small" onClick={props.onClick}>
+            {props.button}
+          </Button>
         </div>
       </div>
     </div>
