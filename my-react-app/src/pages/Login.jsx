@@ -1,16 +1,26 @@
 import React from "react";
-import loginimg from "../assets/login.jpg";
+import logoImg from "../assets/logo.png";
 import { Button, TextField } from "@mui/material";
 
 export default function Login() {
   return (
-    <div className="grid w-100% h-auto grid-cols-2 mx-16 rounded-lg my-16 border-2 border-cyan-700 ">
-      <div>
-        <img src={loginimg} alt="login" />
-      </div>
-      <div className="flex flex-col items-center justify-center gap-3 align-middle rounded-md bg-gradient-to-t from-slate-200 to-cyan-900 ">
-        <h1 className="mb-12 text-6xl">Login</h1>
-        <form className="flex flex-col gap-3">
+    <div className="bg-sky-200 ">
+      <div className="flex flex-col items-center justify-center h-screen bg-white border-2 rounded-md">
+        <img
+          src={logoImg}
+          alt="logo"
+          className="p-0 m-0 size-30 phone:size-20 tablet:size-24 desktop:size-32"
+        />
+        <div className="flex flex-col items-center justify-center gap-3 mb-5">
+          <h1 className="font-bold tracking-wide text-purple-600 text-sp phone:text-lg tablet:text-xl desktop:text-xl ">
+            Hi, Welcome Back
+          </h1>
+          <h2 className="font-medium text-gray-400 phone:text-base tablet:text-lg desktop:text-lg">
+            Enter your credentials to login
+          </h2>
+        </div>
+
+        <form className="flex flex-col gap-2">
           <TextField
             helperText=" "
             id="demo-helper-text-aligned-no-helper"
@@ -21,13 +31,15 @@ export default function Login() {
             id="demo-helper-text-aligned-no-helper"
             label="Password"
           />
-          <Button variant="contained" size="medium">
+          <div className="flex flex-row text-base space-x-14 ">
+            <p>Keep Me Logged in</p>
+            <button className="text-purple-600">Forget Password?</button>
+          </div>
+          <Button variant="contained" className="bg-purple-600" size="medium">
             Login
           </Button>
-          <div className="flex flex-row gap-2">
-            <p>If you have don't have an account</p>
-            <Button size="small">Signup</Button>
-          </div>
+
+          <Button size="small ">Don't have an account?</Button>
         </form>
       </div>
     </div>
