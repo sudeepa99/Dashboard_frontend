@@ -35,7 +35,7 @@ export default function Signup() {
       try {
         const result = await SignupRequest(formData);
         console.log("Signup Successfull");
-        navigate("/login");
+        navigate("/");
       } catch (error) {
         console.log("Signup error");
 

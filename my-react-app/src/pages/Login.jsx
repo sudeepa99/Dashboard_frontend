@@ -12,6 +12,7 @@ import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import LoginValidation from "../validations/LoginValidation";
 import { LoginRequest } from "../services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -21,6 +22,7 @@ export default function Login() {
     password: "",
   });
   const [errors, setErrors] = React.useState({});
+  const navigate = useNavigate();
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -34,6 +36,7 @@ export default function Login() {
       try {
         const result = await LoginRequest(formData);
         console.log("Login successfull");
+        navigate("/dashboard");
       } catch (error) {
         console.log("Login error");
         setErrors({
