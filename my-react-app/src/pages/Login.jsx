@@ -10,11 +10,31 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
+import LoginValidation from "../validations/LoginValidation";
 
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
-
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const [formData, setFormData] = React.useState({
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = React.useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const validationErrors = LoginValidation(formData);
+    if (Object.keys(validationErrors).length === 0) {
+      console.log("Form submitted successfully");
+    } else {
+      setErrors(validationErrors);
+    }
+  };
 
   return (
     <div className="flex items-center justify-center h-screen bg-sky-50">
@@ -35,19 +55,27 @@ export default function Login() {
 
         <form className="flex flex-col gap-1 ">
           <TextField
-            helperText=" "
             id="demo-helper-text-aligned-no-helper"
             label="Email"
+            name="email"
             fullWidth
+            value={formData.email}
+            error={!!errors.email}
+            helperText={errors.email}
+            onChange={handleChange}
             sx={{ maxWidth: "390px" }}
           />
           <TextField
-            helperText=" "
             id="demo-helper-text-aligned-no-helper"
             label="Password"
+            name="password"
             sx={{ maxWidth: "390px" }}
             fullWidth
             type={showPassword ? "text" : "password"}
+            value={formData.password}
+            error={!!errors.password}
+            onChange={handleChange}
+            helperText={errors.password}
             InputProps={{
               endAdornment: (
                 <InputAdornment position="end">
@@ -70,7 +98,11 @@ export default function Login() {
               Forgot Password?
             </button>
           </div>
-          <button className="h-10 mt-6 font-semibold text-white bg-purple-600 rounded-md ">
+          <button
+            type="submit"
+            onClick={handleSubmit}
+            className="h-10 mt-6 font-semibold text-white bg-purple-600 rounded-md "
+          >
             Sign In
           </button>
 

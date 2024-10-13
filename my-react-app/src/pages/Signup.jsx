@@ -40,6 +40,7 @@ export default function Signup() {
               helperText=" "
               id="demo-helper-text-aligned-no-helper"
               label="First Name"
+              required
               sx={{ maxWidth: "180px" }}
               fullWidth
             />
@@ -47,6 +48,7 @@ export default function Signup() {
               helperText=" "
               id="demo-helper-text-aligned-no-helper"
               label="Last Name"
+              required
               sx={{ maxWidth: "180px" }}
               fullWidth
             />
@@ -55,6 +57,7 @@ export default function Signup() {
             helperText=" "
             id="demo-helper-text-aligned-no-helper"
             label="Email"
+            required
             sx={{ maxWidth: "390px" }}
             fullWidth
           />
@@ -62,6 +65,7 @@ export default function Signup() {
             helperText=" "
             id="demo-helper-text-aligned-no-helper"
             label="Password"
+            required
             sx={{ maxWidth: "390px" }}
             fullWidth
             type={showPassword ? "text" : "password"}
@@ -79,7 +83,7 @@ export default function Signup() {
             }}
           />
           <div className="flex flex-row gap-3">
-            <Input type="checkbox" />
+            <Input type="checkbox" required />
             {/* <span onClick={handleIconClick}>
               <FontAwesomeIcon icon={faSquareCheck} />
             </span> */}
