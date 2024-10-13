@@ -1,8 +1,21 @@
 import React from "react";
 import logoImg from "../assets/logo.png";
-import { Button, TextField } from "@mui/material";
+import {
+  Button,
+  IconButton,
+  Input,
+  InputAdornment,
+  TextField,
+} from "@mui/material";
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
+import { faEye } from "@fortawesome/free-solid-svg-icons";
+import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 
 export default function Login() {
+  const [showPassword, setShowPassword] = React.useState(false);
+
+  const handleClickShowPassword = () => setShowPassword(!showPassword);
+
   return (
     <div className="flex items-center justify-center h-screen bg-sky-50">
       <div className="box-content flex flex-col items-center justify-start  bg-white border-2 border-transparent rounded-md  phone:w-[350px] phone:h-[500px] tablet:w-[400px] tablet:h-[500px] desktop:w-[500px] desktop:h-[600px]  ">
@@ -20,7 +33,7 @@ export default function Login() {
           </h2>
         </div>
 
-        <form className="flex flex-col gap-1 phone:mx-5">
+        <form className="flex flex-col gap-1 ">
           <TextField
             helperText=" "
             id="demo-helper-text-aligned-no-helper"
@@ -34,9 +47,25 @@ export default function Login() {
             label="Password"
             sx={{ maxWidth: "390px" }}
             fullWidth
+            type={showPassword ? "text" : "password"}
+            InputProps={{
+              endAdornment: (
+                <InputAdornment position="end">
+                  <IconButton onClick={handleClickShowPassword} edge="end">
+                    <FontAwesomeIcon
+                      icon={showPassword ? faEye : faEyeSlash}
+                      size="sm"
+                    />
+                  </IconButton>
+                </InputAdornment>
+              ),
+            }}
           />
-          <div className="flex flex-row text-sm desktop:space-x-40 phone:space-x-10 ">
-            <p>Keep Me Logged in</p>
+          <div className="flex flex-row text-sm desktop:space-x-36 phone:space-x-10 ">
+            <div className="flex flex-row gap-2">
+              <Input type="checkbox" />
+              <p>Keep Me Logged in</p>
+            </div>
             <button className="font-semibold text-purple-600 ">
               Forgot Password?
             </button>
