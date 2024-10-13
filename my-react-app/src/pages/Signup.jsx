@@ -11,11 +11,34 @@ import {
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
+import SignupValidations from "../validations/SignupValidations";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = React.useState(false);
-
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+
+  const [formData, setFormData] = React.useState({
+    firstName: "",
+    lastName: "",
+    email: "",
+    password: "",
+  });
+  const [errors, setErrors] = React.useState({});
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    const validationErrors = SignupValidations(formData);
+    if (Object.keys(validationErrors).length === 0) {
+      console.log("Form submitted successfully");
+    } else {
+      setErrors(validationErrors);
+    }
+  };
   return (
     <div className="flex items-center justify-center h-screen bg-sky-50">
       <div className="box-content flex flex-col items-center justify-start  bg-white border-2 border-transparent rounded-md  phone:w-[350px] phone:h-[600px] tablet:w-[400px] tablet:h-[600px] desktop:w-[500px] desktop:h-[650px] ">
@@ -37,34 +60,46 @@ export default function Signup() {
         <form className="flex flex-col gap-1 phone:mx-5">
           <div className="flex flex-row gap-2">
             <TextField
-              helperText=" "
               id="demo-helper-text-aligned-no-helper"
               label="First Name"
+              value={formData.firstName}
+              error={!!errors.firstName}
+              onChange={handleChange}
+              helperText={errors.firstName}
               required
               sx={{ maxWidth: "180px" }}
               fullWidth
             />
             <TextField
-              helperText=" "
               id="demo-helper-text-aligned-no-helper"
               label="Last Name"
+              value={formData.lastName}
+              error={!!errors.lastName}
+              onChange={handleChange}
+              helperText={errors.lastName}
               required
               sx={{ maxWidth: "180px" }}
               fullWidth
             />
           </div>
           <TextField
-            helperText=" "
             id="demo-helper-text-aligned-no-helper"
             label="Email"
+            value={formData.email}
+            error={!!errors.email}
+            helperText={errors.email}
+            onChange={handleChange}
             required
             sx={{ maxWidth: "390px" }}
             fullWidth
           />
           <TextField
-            helperText=" "
             id="demo-helper-text-aligned-no-helper"
             label="Password"
+            value={formData.password}
+            error={!!errors.password}
+            onChange={handleChange}
+            helperText={errors.password}
             required
             sx={{ maxWidth: "390px" }}
             fullWidth
@@ -84,14 +119,14 @@ export default function Signup() {
           />
           <div className="flex flex-row gap-3">
             <Input type="checkbox" required />
-            {/* <span onClick={handleIconClick}>
-              <FontAwesomeIcon icon={faSquareCheck} />
-            </span> */}
-
             <p>Agree with Terms & Conditions</p>
           </div>
 
-          <button className="h-10 mt-4 font-semibold text-white bg-purple-600 rounded-md ">
+          <button
+            type="submit"
+            className="h-10 mt-4 font-semibold text-white bg-purple-600 rounded-md "
+            onClick={handleSubmit}
+          >
             Sign Up
           </button>
 

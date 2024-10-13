@@ -9,5 +9,11 @@ export default function LoginValidation(formData) {
     errors.email = "Invalid Email format";
   }
 
+  if (formData.password === "") {
+    errors.password = "Password is required!";
+  } else if (formData.password.length < 6) {
+    errors.password = "Password must be at least 6 characters long.";
+  }
+
   return errors;
 }
