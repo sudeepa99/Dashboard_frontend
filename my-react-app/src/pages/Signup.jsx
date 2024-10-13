@@ -1,27 +1,25 @@
 import React from "react";
 import logoImg from "../assets/logo.png";
 
-import {
-  Button,
-  IconButton,
-  Input,
-  InputAdornment,
-  TextField,
-} from "@mui/material";
+import { IconButton, Input, InputAdornment, TextField } from "@mui/material";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import SignupValidations from "../validations/SignupValidations";
+import { SignupRequest } from "../services/AuthService";
+import { useNavigate } from "react-router-dom";
 
 export default function Signup() {
   const [showPassword, setShowPassword] = React.useState(false);
   const handleClickShowPassword = () => setShowPassword(!showPassword);
+  const navigate = useNavigate();
 
   const [formData, setFormData] = React.useState({
     firstName: "",
     lastName: "",
     email: "",
     password: "",
+    agreeTerms: false,
   });
   const [errors, setErrors] = React.useState({});
 
@@ -30,11 +28,22 @@ export default function Signup() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const validationErrors = SignupValidations(formData);
     if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted successfully");
+      try {
+        const result = await SignupRequest(formData);
+        console.log("Signup Successfull");
+        navigate("/login");
+      } catch (error) {
+        console.log("Signup error");
+
+        setErrors({
+          ...errors,
+          SignupRequest: "Signup Failed Please Try again.",
+        });
+      }
     } else {
       setErrors(validationErrors);
     }
@@ -57,10 +66,14 @@ export default function Signup() {
           <h3 className="text-black">Sign up with Email Address</h3>
         </div>
 
-        <form className="flex flex-col gap-1 phone:mx-5">
+        <form
+          className="flex flex-col gap-1 phone:mx-5"
+          onSubmit={handleSubmit}
+        >
           <div className="flex flex-row gap-2">
             <TextField
-              id="demo-helper-text-aligned-no-helper"
+              id="signup_fname"
+              name="firstName"
               label="First Name"
               value={formData.firstName}
               error={!!errors.firstName}
@@ -71,7 +84,8 @@ export default function Signup() {
               fullWidth
             />
             <TextField
-              id="demo-helper-text-aligned-no-helper"
+              id="signup_lname"
+              name="lastName"
               label="Last Name"
               value={formData.lastName}
               error={!!errors.lastName}
@@ -83,7 +97,8 @@ export default function Signup() {
             />
           </div>
           <TextField
-            id="demo-helper-text-aligned-no-helper"
+            id="signup_email"
+            name="email"
             label="Email"
             value={formData.email}
             error={!!errors.email}
@@ -94,7 +109,8 @@ export default function Signup() {
             fullWidth
           />
           <TextField
-            id="demo-helper-text-aligned-no-helper"
+            id="signup_password"
+            name="password"
             label="Password"
             value={formData.password}
             error={!!errors.password}
@@ -118,14 +134,21 @@ export default function Signup() {
             }}
           />
           <div className="flex flex-row gap-3">
-            <Input type="checkbox" required />
+            <Input
+              id="signup_agree"
+              name="agreeTerms"
+              label="Terms & Conditions"
+              type="checkbox"
+              aria-checked={formData.agreeTerms}
+              onChange={handleChange}
+              required
+            />
             <p>Agree with Terms & Conditions</p>
           </div>
 
           <button
             type="submit"
             className="h-10 mt-4 font-semibold text-white bg-purple-600 rounded-md "
-            onClick={handleSubmit}
           >
             Sign Up
           </button>

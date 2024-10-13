@@ -11,6 +11,7 @@ import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
 import { faEye } from "@fortawesome/free-solid-svg-icons";
 import { faEyeSlash } from "@fortawesome/free-solid-svg-icons";
 import LoginValidation from "../validations/LoginValidation";
+import { LoginRequest } from "../services/AuthService";
 
 export default function Login() {
   const [showPassword, setShowPassword] = React.useState(false);
@@ -26,11 +27,20 @@ export default function Login() {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleSubmit = (event) => {
+  const handleSubmit = async (event) => {
     event.preventDefault();
     const validationErrors = LoginValidation(formData);
     if (Object.keys(validationErrors).length === 0) {
-      console.log("Form submitted successfully");
+      try {
+        const result = await LoginRequest(formData);
+        console.log("Login successfull");
+      } catch (error) {
+        console.log("Login error");
+        setErrors({
+          ...errors,
+          LoginRequest: "Login Failed Please Try again.",
+        });
+      }
     } else {
       setErrors(validationErrors);
     }
@@ -53,9 +63,9 @@ export default function Login() {
           </h2>
         </div>
 
-        <form className="flex flex-col gap-1 ">
+        <form className="flex flex-col gap-1 " onSubmit={handleSubmit}>
           <TextField
-            id="demo-helper-text-aligned-no-helper"
+            id="login_email"
             label="Email"
             name="email"
             fullWidth
@@ -66,7 +76,7 @@ export default function Login() {
             sx={{ maxWidth: "390px" }}
           />
           <TextField
-            id="demo-helper-text-aligned-no-helper"
+            id="login_password"
             label="Password"
             name="password"
             sx={{ maxWidth: "390px" }}
@@ -100,7 +110,6 @@ export default function Login() {
           </div>
           <button
             type="submit"
-            onClick={handleSubmit}
             className="h-10 mt-6 font-semibold text-white bg-purple-600 rounded-md "
           >
             Sign In

@@ -1,5 +1,6 @@
 export default function SignupValidation(formData) {
   const name_pattern = /^[A-Za-z]+$/;
+  const email_pattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
   const errors = {};
 

@@ -2,12 +2,12 @@ import axios from "axios";
 
 const api_url = "http://localhost:8080/api/auth";
 
-export const Signup = async (userData) => {
+export const SignupRequest = async (userData) => {
   const reponse = await axios.post(`${api_url}/signup`, userData);
   return Response.data;
 };
 
-export const Login = async (userData) => {
+export const LoginRequest = async (userData) => {
   const reponse = await axios.post(`${api_url}/login`, userData);
   return Response.data;
 };
