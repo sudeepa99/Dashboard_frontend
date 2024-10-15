@@ -34,14 +34,30 @@ export default function Login() {
     const validationErrors = LoginValidation(formData);
     if (Object.keys(validationErrors).length === 0) {
       try {
+        console.log("Submitting login request with:", formData);
+
         const result = await LoginRequest(formData);
+        console.log("Login response:", result);
+
+        const token = result.accessToken;
+        const userRole = result.user.roles[0].name;
+        console.log(userRole);
+        // const userRole = result.data;
+        localStorage.setItem("token", token);
+        localStorage.setItem("role", userRole);
+        console.log(111111);
+        console.log(token);
+        console.log(111111);
         console.log("Login successfull");
-        navigate("/dashboard");
+
+        navigate("/dashboard", { state: { role: userRole } });
       } catch (error) {
-        console.log("Login error");
+        console.log("Login error", error);
         setErrors({
           ...errors,
-          LoginRequest: "Login Failed Please Try again.",
+          LoginRequest: error.response
+            ? error.response.data.message || "Please try again."
+            : "Login in failed, check your network and try again.",
         });
       }
     } else {

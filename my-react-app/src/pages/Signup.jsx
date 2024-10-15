@@ -24,8 +24,11 @@ export default function Signup() {
   const [errors, setErrors] = React.useState({});
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+    const { name, type, checked, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: type === "checkbox" ? checked : value,
+    });
   };
 
   const handleSubmit = async (event) => {
@@ -145,6 +148,9 @@ export default function Signup() {
             />
             <p>Agree with Terms & Conditions</p>
           </div>
+          {errors.agreeTerms && (
+            <p className="text-red-500">{errors.agreeTerms}</p>
+          )}
 
           <button
             type="submit"
