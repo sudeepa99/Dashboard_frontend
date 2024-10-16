@@ -42,12 +42,12 @@ export default function Login() {
         const token = result.accessToken;
         const userRole = result.user.roles[0].name;
         console.log(userRole);
-        // const userRole = result.data;
+
         localStorage.setItem("token", token);
         localStorage.setItem("role", userRole);
-        console.log(111111);
+
         console.log(token);
-        console.log(111111);
+
         console.log("Login successfull");
 
         navigate("/dashboard", { state: { role: userRole } });
@@ -123,7 +123,7 @@ export default function Login() {
               <Input type="checkbox" />
               <p>Keep Me Logged in</p>
             </div>
-            <button className="font-semibold text-purple-600 ">
+            <button type="button" className="font-semibold text-purple-600 ">
               Forgot Password?
             </button>
           </div>
@@ -134,7 +134,10 @@ export default function Login() {
             Sign In
           </button>
 
-          <button className="h-10 font-semibold text-black mt-7 ">
+          <button
+            className="h-10 font-semibold text-black mt-7 "
+            onClick={() => navigate("/signup")}
+          >
             Don't have an account?
           </button>
         </form>

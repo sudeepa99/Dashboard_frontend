@@ -159,7 +159,10 @@ export default function Signup() {
             Sign Up
           </button>
 
-          <button className="h-10 mt-4 font-semibold text-black ">
+          <button
+            className="h-10 mt-4 font-semibold text-black "
+            onClick={() => navigate("/")}
+          >
             Already have an account?
           </button>
         </form>

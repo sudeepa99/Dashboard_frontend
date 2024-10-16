@@ -1,90 +1,77 @@
 import React, { useEffect, useState } from "react";
+import { deleteUser, fetchUsers, updateUser } from "../services/UserService";
 
 export default function UserTable() {
   const [users, setUsers] = useState([]);
-  const [editingUser, setEditingUser] = useState(null); // For editing
-  const [updatedUser, setUpdatedUser] = useState({}); // For updating
+  const [editingUser, setEditingUser] = useState(null);
+  const [updatedUser, setUpdatedUser] = useState({});
   const [error, setError] = useState(null);
 
-  // Fetch users on component mount
   useEffect(() => {
-    fetch("http://localhost:8080/api/user/")
-      .then((response) => response.json())
-      .then((data) => {
+    const getUsers = async () => {
+      try {
+        const data = await fetchUsers();
         if (data.status) {
           setUsers(data.data);
         } else {
           setError("Failed to fetch users");
         }
-      })
-      .catch((error) => setError("Error fetching users: " + error.message));
+      } catch (error) {
+        setError("Error fetching users: " + error.message);
+      }
+    };
+
+    getUsers();
   }, []);
 
-  // Handle input changes for editing
   const handleInputChange = (e) => {
     const { name, value } = e.target;
     setUpdatedUser({ ...updatedUser, [name]: value });
   };
 
-  // Handle the "Edit" button click
   const handleEditClick = (user) => {
     setEditingUser(user.user_id);
     setUpdatedUser(user);
   };
 
-  // Handle the "Save" button click
-  const handleSaveClick = () => {
+  const handleSaveClick = async () => {
     if (window.confirm("Are you sure you want to save changes?")) {
-      fetch(`http://localhost:8080/api/user/${updatedUser.user_id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(updatedUser),
-      })
-        .then((response) => response.json())
-        .then((data) => {
-          if (data.status) {
-            setUsers((prevUsers) =>
-              prevUsers.map((user) =>
-                user.user_id === updatedUser.user_id ? updatedUser : user
-              )
-            );
-            setEditingUser(null);
-          } else {
-            setError("Failed to save changes");
-          }
-        })
-        .catch((error) => setError("Error saving changes: " + error.message));
+      try {
+        const data = await updateUser(updatedUser.user_id, updatedUser);
+        if (data.status) {
+          setUsers((prevUsers) =>
+            prevUsers.map((user) =>
+              user.user_id === updatedUser.user_id ? updatedUser : user
+            )
+          );
+          setEditingUser(null);
+        } else {
+          setError("Failed to save changes");
+        }
+      } catch (error) {
+        setError("Error saving changes: " + error.message);
+      }
     }
   };
 
-  // Handle the "Delete" button click
-  const handleDeleteClick = (user) => {
+  const handleDeleteClick = async (user) => {
     if (user.roles[0].name === "admin") {
       alert("Admin users cannot be deleted.");
       return;
     }
 
     if (window.confirm("Are you sure you want to delete this user?")) {
-      fetch(`http://localhost:8080/api/user/${user.user_id}`, {
-        method: "DELETE",
-      })
-        .then((response) => {
-          if (response.ok) {
-            // Remove the deleted user from the state
-            setUsers((prevUsers) =>
-              prevUsers.filter((u) => u.user_id !== user.user_id)
-            );
-          } else {
-            setError("Failed to delete user");
-          }
-        })
-        .catch((error) => setError("Error deleting user: " + error.message));
+      try {
+        await deleteUser(user.user_id);
+        setUsers((prevUsers) =>
+          prevUsers.filter((u) => u.user_id !== user.user_id)
+        );
+      } catch (error) {
+        setError("Error deleting user: " + error.message);
+      }
     }
   };
 
-  // Handle the "Cancel" button click
   const handleCancelClick = () => {
     setEditingUser(null);
   };
