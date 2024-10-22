@@ -1,4 +1,6 @@
 import React from "react";
+import { Navigate } from "react-router-dom";
+import { decode as jwt_decode } from "jwt-decode";
 
 const ProtectedRoute = ({ children }) => {
   const token = localStorage.getItem("token");
@@ -9,6 +11,8 @@ const ProtectedRoute = ({ children }) => {
   try {
     const decodedToken = jwt_decode(token);
     const currentTime = Date.now() / 1000;
+    console.log("Token expiration time:", decodedToken.exp);
+    console.log("Current time:", currentTime);
 
     if (decodedToken.exp < currentTime) {
       localStorage.removeItem("token");
