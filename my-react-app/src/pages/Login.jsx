@@ -141,6 +141,11 @@ export default function Login() {
             Don't have an account?
           </button>
         </form>
+        {errors.LoginRequest && (
+          <div className="mt-4 text-red-500">
+            <p>{errors.LoginRequest}</p>
+          </div>
+        )}
       </div>
     </div>
   );
